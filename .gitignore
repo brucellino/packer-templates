@@ -1,0 +1,3 @@
+# ignore images
+*.img
+packer-builder-arm
