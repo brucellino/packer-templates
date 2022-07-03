@@ -11,6 +11,6 @@ crash.log
 packer-builder-arm
 
 # ignore node modules
-node-modules
+node_modules/
 package-lock.json
 package.json
