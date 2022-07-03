@@ -24,7 +24,7 @@ source "docker" "ubuntu2004" {
 
 build {
   sources = ["source.docker.ubuntu2004"]
-  
+
   provisioner "shell" {
     inline = [
       "apt-get update -qq",
@@ -36,7 +36,7 @@ build {
 
     ]
   }
-  
+
   post-processors {
     post-processor "docker-tag" {
       repository = "ghcr.io/brucellino/ubuntu"
@@ -49,4 +49,3 @@ build {
     }
   }
 }
-
