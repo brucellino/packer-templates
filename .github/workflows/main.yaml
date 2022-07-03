@@ -25,8 +25,8 @@ jobs:
           gunzip -> packer ; \
           chmod u+x packer
 
-      - name: "Validate Packer templates"
-        run: ./packer validate ${{ matrix.template }}
+      # - name: "Validate Packer templates"
+      #   run: ./packer validate ${{ matrix.template }}
 
   release:
     needs:
