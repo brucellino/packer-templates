@@ -9,3 +9,8 @@ crash.log
 # ignore images
 *.img
 packer-builder-arm
+
+# ignore node modules
+node-modules
+package-lock.json
+package.json
