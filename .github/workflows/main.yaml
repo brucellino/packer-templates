@@ -15,6 +15,10 @@ jobs:
     name: Validate
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: "Get Packer"
         run: |
           curl https://releases.hashicorp.com/packer/1.8.2/packer_1.8.2_linux_amd64.zip | \
