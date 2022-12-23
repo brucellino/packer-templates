@@ -14,4 +14,7 @@ source "arm-image" "raspberry_pi_os" {
 
 build {
   sources = ["source.arm-image.raspberry_pi_os"]
+  provisioner "ansible" {
+
+  }
 }
