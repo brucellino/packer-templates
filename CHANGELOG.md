@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/brucellino/packer-templates/compare/v1.1.0...v1.2.0) (2022-12-23)
+
+
+### Bug Fixes
+
+* **raspi:** add minio volumes to arm64 template ([5270ecd](https://github.com/brucellino/packer-templates/commit/5270ecd1ff79947148b57e60631608e14f137566))
+
+
+### Features
+
+* **ansible:** add ansible packer template ([c31ca73](https://github.com/brucellino/packer-templates/commit/c31ca73e74ea24f22db497202e0d4b9c49297e4e))
+
 # [1.1.0](https://github.com/brucellino/packer-templates/compare/v1.0.0...v1.1.0) (2022-07-03)
 
 
