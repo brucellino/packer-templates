@@ -18,7 +18,7 @@ source "docker" "ubuntu2004" {
   changes = [
     "USER ubuntu",
     "LABEL version=${var.version}",
-        "LABEL org.opencontainers.image.source https://github.com/brucellino/packer-templates"
+    "LABEL org.opencontainers.image.source https://github.com/brucellino/packer-templates"
   ]
 }
 
