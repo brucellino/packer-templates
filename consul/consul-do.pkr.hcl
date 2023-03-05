@@ -37,9 +37,10 @@ variable "vpc_uuid" {
 }
 
 data "digitalocean-image" "base-ubuntu" {
-  name   = var.base_image_name
-  region = var.region
-  type   = "distribution"
+  api_token = vault("digitalocean/data/tokens", "packer")
+  name      = var.base_image_name
+  region    = var.region
+  type      = "distribution"
 }
 
 
