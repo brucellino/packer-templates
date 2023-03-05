@@ -30,7 +30,7 @@ jobs:
           chmod u+x vault
       - name: "Start dev server"
         run: |
-          ./vault nohup vault server -dev -dev-root-token-id=token &
+          nohup ./vault server -dev -dev-root-token-id=token &
       - name: "Unseal Vault"
         run: |
           ./vault operator unseal $(grep "Unseal Key" nohup.out | awk '{print $3}')
