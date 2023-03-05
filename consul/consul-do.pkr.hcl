@@ -29,6 +29,13 @@ local "do_token" {
   sensitive  = true
 }
 
+
+variable "vpc_uuid" {
+  type      = string
+  sensitive = false
+  default   = "08a4d3ad-a229-40dd-8dd4-042bda3e09bc" # this is only available in AMS3 - a map is needed.
+}
+
 data "digitalocean-image" "base-ubuntu" {
   name   = var.base_image_name
   region = var.region
@@ -49,6 +56,7 @@ source "digitalocean" "server" {
   private_networking = true
   droplet_name       = "consul-build"
   tags               = ["packer", "consul"]
+  vpc_uuid           = var.vpc_uuid
 }
 
 build {
