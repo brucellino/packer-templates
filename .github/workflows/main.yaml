@@ -11,8 +11,8 @@ jobs:
     strategy:
       matrix:
         template:
-          - ubuntu-server/ubuntu_server_amd64.pkr.hcl
-          - consul/consul-do.pkr.hcl
+          - ubuntu-server
+          - consul
     name: Validate
     runs-on: ubuntu-latest
     steps:
@@ -25,9 +25,11 @@ jobs:
           curl https://releases.hashicorp.com/packer/1.8.2/packer_1.8.2_linux_amd64.zip | \
           gunzip -> packer ; \
           chmod u+x packer
-
+      - name: "Init Packer"
+        run: |
+          cd ${{ matrix.template }} ; ./packer init .
       - name: "Validate Packer templates"
-        run: ./packer validate ${{ matrix.template }}
+        run: cd ${{ matrix.template }} ; ./packer validate .
 
   release:
     needs:
