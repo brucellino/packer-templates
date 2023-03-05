@@ -12,6 +12,7 @@ jobs:
       matrix:
         template:
           - ubuntu-server/ubuntu_server_amd64.pkr.hcl
+          - consul/consul-do.pkr.hcl
     name: Validate
     runs-on: ubuntu-latest
     steps:
@@ -25,8 +26,8 @@ jobs:
           gunzip -> packer ; \
           chmod u+x packer
 
-      # - name: "Validate Packer templates"
-      #   run: ./packer validate ${{ matrix.template }}
+      - name: "Validate Packer templates"
+        run: ./packer validate ${{ matrix.template }}
 
   release:
     needs:
