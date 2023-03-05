@@ -42,7 +42,7 @@ jobs:
         run: |
           cd ${{ matrix.template }} ; ../packer init .
       - name: "Validate Packer templates"
-        run: cd ${{ matrix.template }} ; ../packer validate .
+        run: cd ${{ matrix.template }} ; PATH=${PATH}:../ packer validate .
 
   release:
     needs:
