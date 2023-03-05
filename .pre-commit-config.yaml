@@ -31,5 +31,15 @@ repos:
       - id: commitlint
         stages: [commit-msg]
         additional_dependencies: ['@commitlint/config-conventional']
+  - repo: local
+    hooks:
+      - id: packer-fmt
+        name: Packer Format
+        language: system
+        types:
+          - hcl
+        entry: packer fmt
 ci:
   autoupdate_branch: main
+  skip:
+    - packer-fmt

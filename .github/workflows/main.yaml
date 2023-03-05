@@ -11,22 +11,42 @@ jobs:
     strategy:
       matrix:
         template:
-          - ubuntu-server/ubuntu_server_amd64.pkr.hcl
+          - ubuntu-server
+          - consul
     name: Validate
     runs-on: ubuntu-latest
+    env:
+      VAULT_ADDR: http://localhost:8200
+      VAULT_TOKEN: token
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Start Vault Server
+        run: |
+          curl https://releases.hashicorp.com/vault/1.13.0/vault_1.13.0_linux_amd64.zip | \
+          gunzip -> vault ; \
+          chmod u+x vault ; \
+          ./vault server -dev -dev-root-token-id=${VAULT_TOKEN} | tee vault-output.txt &
+      - name: Enable Secrets mount
+        run: |
+          ./vault secrets enable -path="digitalocean" -description="KV data" kv-v2 ; \
+          ./vault secrets enable -path="kv" kv-v2
+      - name: Populate the DO secret
+        run: ./vault kv put -mount="digitalocean" tokens packer=${{ secrets.DO_TOKEN }}
+      - name: Populate the GH secret
+        run: ./vault kv put -mount kv github ghcr_token=${{ secrets.GITHUB_TOKEN }}
       - name: "Get Packer"
         run: |
           curl https://releases.hashicorp.com/packer/1.8.2/packer_1.8.2_linux_amd64.zip | \
           gunzip -> packer ; \
           chmod u+x packer
-
-      # - name: "Validate Packer templates"
-      #   run: ./packer validate ${{ matrix.template }}
+      - name: "Init Packer"
+        run: |
+          cd ${{ matrix.template }} ; ../packer init .
+      - name: "Validate Packer templates"
+        run: cd ${{ matrix.template }} ; PATH=${PATH}:../ packer validate .
 
   release:
     needs:
