@@ -36,7 +36,7 @@ data "digitalocean-image" "base-ubuntu" {
 }
 
 
-source "digitalocean" "ubuntu" {
+source "digitalocean" "server" {
   api_token          = local.do_token
   image              = data.digitalocean-image.base-ubuntu.image_id
   region             = var.region
@@ -52,5 +52,9 @@ source "digitalocean" "ubuntu" {
 }
 
 build {
-  sources = ["source.digitalocean.ubuntu"]
+  name    = "server"
+  sources = ["source.digitalocean.server"]
+  provisioner "ansible" {
+    playbook_file = "playbook.yml"
+  }
 }

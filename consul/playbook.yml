@@ -1,0 +1,6 @@
+---
+- hosts: all
+  name: Setup
+  tasks:
+    - name: check
+      ping:
