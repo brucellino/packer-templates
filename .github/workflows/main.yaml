@@ -36,7 +36,7 @@ jobs:
       - name: Populate the DO secret
         run: ./vault kv put -mount="digitalocean" tokens packer=${{ secrets.DO_TOKEN }}
       - name: Populate the GH secret
-        run: ./vault kv put -mount kv github ghcr_token=${{ secret.GITHUB_TOKEN }}
+        run: ./vault kv put -mount kv github ghcr_token=${{ secrets.GITHUB_TOKEN }}
       - name: "Get Packer"
         run: |
           curl https://releases.hashicorp.com/packer/1.8.2/packer_1.8.2_linux_amd64.zip | \
