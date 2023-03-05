@@ -41,3 +41,5 @@ repos:
         entry: packer fmt
 ci:
   autoupdate_branch: main
+  skip:
+    - packer-fmt
