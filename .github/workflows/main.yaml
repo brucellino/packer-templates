@@ -27,9 +27,9 @@ jobs:
           chmod u+x packer
       - name: "Init Packer"
         run: |
-          cd ${{ matrix.template }} ; ./packer init .
+          cd ${{ matrix.template }} ; ../packer init .
       - name: "Validate Packer templates"
-        run: cd ${{ matrix.template }} ; ./packer validate .
+        run: cd ${{ matrix.template }} ; ../packer validate .
 
   release:
     needs:
