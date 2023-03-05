@@ -18,7 +18,7 @@ jobs:
     services:
       vault:
         image: hashicorp/vault
-        options: server -dev -dev-root-token-id=token
+        # entrypoint: "server -dev -dev-root-token-id=token"
     env:
       VAULT_ADDR: http://vault:8200
       VAULT_TOKEN: token
