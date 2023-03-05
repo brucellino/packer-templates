@@ -15,15 +15,6 @@ jobs:
           - consul
     name: Validate
     runs-on: ubuntu-latest
-    services:
-      vault:
-        image: hashicorp/vault
-        options: >-
-          server
-          -dev
-          -dev-root-token-id=token
-        ports:
-          - 8200:8200
     env:
       VAULT_ADDR: http://vault:8200
       VAULT_TOKEN: token
@@ -32,9 +23,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Start Vault
+        run: |
+          docker run -d --name vault-dev hashicorp/vault server -dev -dev-root-token-id=test
       - name: Get logs
         run: |
-          docker logs vault | grep "Unseal Key" | awk '{print $3}'
+          docker logs vault-dev | grep "Unseal Key" | awk '{print $3}'
       - name: "Unseal Vault"
         run: |
           ./vault operator unseal x
