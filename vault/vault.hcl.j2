@@ -1,0 +1,36 @@
+storage "raft" {
+ path = "[[ raft_data_dir ]]"
+ node_id = "digitalocean-host"
+
+ retry_join {
+   leader_api_addr = "http://sense:8200"
+ }
+
+}
+
+cluster_name = "hah"
+disable_mlock = false
+
+listener "tcp" {
+  address = "127.0.0.1:8200"
+  tls_disable = true
+}
+
+listener "tcp" {
+  address = "{{ GetInterfaceIP \"eth0\" }}:8200"
+  tls_disable = true
+}
+
+api_addr = "http://{{ GetInterfaceIP \"eth0\" }}:8200"
+cluster_addr = "http://{{ GetInterfaceIP \"eth0\" }}:8201"
+
+{% if consul_agent | default (false) %}
+service_registration "consul" {
+  address = "127.0.0.1:8500"
+  tls_skip_verify = "true"
+  check_timeout = "30s"
+  scheme = "http"
+}
+{% endif %}
+
+ui = true
