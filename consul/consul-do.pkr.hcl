@@ -50,12 +50,12 @@ source "digitalocean" "server" {
   region             = var.region
   size               = var.size
   ssh_username       = "root"
-  snapshot_name      = "consul_snap"
+  snapshot_name      = "consul_snap-${formatdate("YYYY-MM-DD-hh-mm", timestamp())}"
   snapshot_regions   = [var.region]
   droplet_agent      = true
   monitoring         = true
   private_networking = true
-  droplet_name       = "consul-build"
+  droplet_name       = "consul-build-${formatdate("YYYY-MM-DD-hh-mm", timestamp())}"
   tags               = ["packer", "consul"]
   vpc_uuid           = var.vpc_uuid
 }

@@ -1,5 +1,94 @@
 ---
 - hosts: all
   name: Setup
-  roles:
-    - consul
+  become: true
+  vars:
+    consul_version: 1.15.0
+  pre_tasks:
+    - name: Wait
+      pause:
+        seconds: 90
+    - name: force update
+      raw: apt-get -y update
+  tasks:
+    - name: Get Consul
+      unarchive:
+        src: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip"
+        dest: /usr/bin/consul
+        remote_src: true
+        mode: 0777
+        owner: root.
+        group: rooot
+    - name: Add Consul group
+      group:
+        name: consul
+        state: present
+    - name: Add Consul user
+      user:
+        name: consul
+        group: consul
+        groups: consul
+        append: true
+        state: present
+    - name: Add configuration directory
+      file:
+        path: /etc/consul.d
+        state: directory
+        recurse: true
+        mode: 0644
+        owner: consul
+        group: consul
+    - name: Create Consul configuration
+      template:
+        src: consul.hcl.j2
+        dest: /etc/consul.d/consul.hcl
+        backup: true
+        mode: 0644
+        owner: consul
+        group: consul
+        block_start_string: "[%"
+        block_end_string: "%]"
+        variable_start_string: "[["
+        variable_end_string: "]]"
+
+    - name: Create Systemd Unit
+      copy:
+        dest: /etc/systemd/system/consul.service
+        content: |
+          [Unit]
+          Description="HashiCorp Consul - A service mesh solution"
+          Documentation=https://www.consul.io/
+          Requires=network-online.target
+          After=network-online.target
+          ConditionFileNotEmpty=/etc/consul.d/consul.hcl
+
+          [Service]
+          EnvironmentFile=-/etc/consul.d/consul.env
+          User=consul
+          Group=consul
+          ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d/
+          ExecReload=/bin/kill --signal HUP $MAINPID
+          KillMode=process
+          KillSignal=SIGTERM
+          Restart=on-failure
+          LimitNOFILE=65536
+
+          [Install]
+          WantedBy=multi-user.target
+
+        backup: false
+        force: true
+        mode: 0644
+        owner: true
+        group: true
+      notify: daemon-reload
+    - name: Start service
+  handlers:
+    - name: daemin-reload
+      systemd:
+        name: consul
+        state: started
+        enabled: true
+        force: true
+        masked: false
+        daemon_reload: true
