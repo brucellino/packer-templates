@@ -6,7 +6,7 @@ attrs==21.2.0
 awxkit==19.4.0
 bcrypt==3.2.0
 bracex==2.2.1
-certifi==2021.10.8
+certifi==2022.12.7
 cffi==1.14.5
 charset-normalizer==2.0.9
 commonmark==0.9.1
