@@ -37,12 +37,10 @@ jobs:
           ${HOME}/bin/vault secrets enable -path="kv" kv-v2
       - name: Populate the DO secret
         run: ${HOME}/bin/vault kv put -mount="digitalocean" tokens packer=${{ secrets.DO_TOKEN }}
-      - name: Create the consul secrets
-        run: ${HOME}/bin/vault kv put
       - name: Populate the GH secret
-        run: ${HOME}/bin/vault kv put -mount kv github ghcr_token=${{ secrets.GITHUB_TOKEN }}
+        run: ${HOME}/bin/vault kv put -mount="kv" github ghcr_token=${{ secrets.GITHUB_TOKEN }}
       - name: Populate Consul Encryption Key
-        run: ${HOME}/bin/vault kv put -mount kv consul encrypt=${{ secrets.CONSUL_ENCRYPT_KEY }}
+        run: ${HOME}/bin/vault kv put -mount="kv" consul encrypt=${{ secrets.CONSUL_ENCRYPT_KEY }}
       - name: "Get Packer"
         run: |
           curl https://releases.hashicorp.com/packer/1.8.2/packer_1.8.2_linux_amd64.zip | \
