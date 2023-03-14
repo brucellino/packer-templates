@@ -3,7 +3,8 @@ storage "raft" {
  node_id = "digitalocean-host"
 
  retry_join {
-   leader_api_addr = "http://sense:8200"
+  auto_join = "provider=digitalocean region=[[ region ]] tag_name=[[ tag_name ]] api_token=[[ autojoin_token ]]"
+  auto_join_scheme = "http"
  }
 
 }
