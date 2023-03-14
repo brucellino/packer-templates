@@ -8,7 +8,7 @@
   pre_tasks:
     - name: Wait
       pause:
-        seconds: 90
+        seconds: 60
     - name: force update
       raw: apt-get -y update
   roles:
