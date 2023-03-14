@@ -54,7 +54,7 @@ jobs:
         run: |
           cd ${{ matrix.template }}
           if [[ -f requirements.yml ]] ; then
-            ansible-galaxy install requirements.yml
+            ansible-galaxy install -r requirements.yml
           fi
       - name: "Init Packer"
         run: |
