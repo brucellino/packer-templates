@@ -1,5 +1,5 @@
 # Python requirements
-ansible==7.0.0
+ansible==7.3.0
 ansible-core==2.13.2
 ansible-lint==5.4.0
 attrs==21.2.0
