@@ -1,16 +1,16 @@
 # Python requirements
-ansible==6.1.0
+ansible==7.3.0
 ansible-core==2.13.2
 ansible-lint==5.4.0
 attrs==21.2.0
 awxkit==19.4.0
 bcrypt==3.2.0
 bracex==2.2.1
-certifi==2021.10.8
-cffi==1.14.5
+certifi==2022.12.7
+cffi==1.15.1
 charset-normalizer==2.0.9
 commonmark==0.9.1
-cryptography==3.4.7
+cryptography==39.0.1
 docutils==0.17.1
 enrich==1.2.7
 hvac==1.0.2
