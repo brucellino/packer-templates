@@ -18,16 +18,19 @@ jobs:
     env:
       VAULT_ADDR: http://localhost:8200
       VAULT_TOKEN: token
+      PATH: ${PATH}:${HOME}/bin
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Create bin dir for cached binaries
+        run: mkdir "${HOME}/bin"
       - name: Start Vault Server
         run: |
           curl https://releases.hashicorp.com/vault/1.13.0/vault_1.13.0_linux_amd64.zip | \
-          gunzip -> /usr/bin/vault ; \
-          chmod u+x /usr/bin/vault ; \
+          gunzip -> "${HOME}/bin/vault" ; \
+          chmod u+x "${HOME}/bin/vault" ; \
           vault server -dev -dev-root-token-id=${VAULT_TOKEN} | tee vault-output.txt &
       - name: Enable Secrets mounts
         run: |
@@ -44,8 +47,8 @@ jobs:
       - name: "Get Packer"
         run: |
           curl https://releases.hashicorp.com/packer/1.8.2/packer_1.8.2_linux_amd64.zip | \
-          gunzip -> /usr/bin/packer ; \
-          chmod u+x /usr/bin/packer
+          gunzip -> "${HOME}/bin/packer" ; \
+          chmod u+x "${HOME}/bin/packer"
       - name: Add Ansible requirements
         run: python3 -m pip install requirements.txt
       - name: Add Ansible collections
