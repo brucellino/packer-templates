@@ -10,7 +10,7 @@ certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==2.0.9
 commonmark==0.9.1
-cryptography==39.0.1
+cryptography==39.0.2
 docutils==0.17.1
 enrich==1.2.7
 hvac==1.0.2
