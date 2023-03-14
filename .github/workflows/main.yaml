@@ -47,7 +47,7 @@ jobs:
           gunzip -> "${HOME}/bin/packer" ; \
           chmod u+x "${HOME}/bin/packer"
       - name: Add Ansible requirements
-        run: python3 -m pip install requirements.txt
+        run: python3 -m pip install -r requirements.txt
       - name: Add Ansible collections
         run: ansible-galaxy collection install community.hashi_vault
       - name: Add Ansible roles
