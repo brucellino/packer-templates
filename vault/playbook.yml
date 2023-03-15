@@ -9,7 +9,7 @@
     raft_data_dir: /data/raft
     prerequisites:
       - jq
-      - net_tools
+      - net-tools
       - curl
   pre_tasks:
     - name: Wait
@@ -26,7 +26,7 @@
     - name: Ensure Vault Group
       group:
         name: vault
-        state: vault
+        state: present
     - name: Ensure Vault user
       user:
         name: vault
