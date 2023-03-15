@@ -84,7 +84,7 @@
         group: true
       notify: daemon-reload
   handlers:
-    - name: daemin-reload
+    - name: daemon-reload
       ansible.builtin.systemd:
         name: consul
         state: started
