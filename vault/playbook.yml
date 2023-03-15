@@ -1,0 +1,82 @@
+---
+- hosts: all
+  name: Setup
+  become: true
+  vars:
+    vault_version: 1.13.0
+    vault_config_dir: /etc/vault
+    vault_bin_dir: /usr/local/bin
+    raft_data_dir: /data/raft
+    tag_name: vault
+    autojoin_token: ""
+    prerequisites:
+      - jq
+      - net-tools
+      - curl
+  pre_tasks:
+    - name: Wait
+      ansible.builtin.pause:
+        seconds: 60
+    - name: Force update
+      ansible.builtin.raw: apt-get -y update
+      changed_when: false
+  tasks:
+    - name: Ensure prerequisites
+      ansible.builtin.package:
+        name: "{{ prerequisites }}"
+        state: present
+    - name: Ensure Vault Group
+      ansible.builtin.group:
+        name: vault
+        state: present
+    - name: Ensure Vault user
+      ansible.builtin.user:
+        name: vault
+        comment: "Vault user added by Ansible"
+        groups: vault
+        append: true
+        state: present
+        create_home: false
+        generate_ssh_key: false
+    - name: Get Vault
+      ansible.builtin.unarchive:
+        src: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip"
+        dest: "{{ vault_bin_dir }}/vault"
+        remote_src: true
+        mode: 0777
+        owner: root
+        group: root
+    - name: Ensure Vault Configuration Directory
+      ansible.builtin.file:
+        path: "{{ vault_config_dir }}"
+        state: directory
+        recurse: true
+        mode: 0770
+        owner: vault
+        group: vault
+    - name: Template Vault Configuration
+      ansible.builtin.template:
+        src: vault.hcl.j2
+        dest: "{{ vault_config_dir }}/vault.hcl"
+        mode: 0660
+        owner: vault
+        group: vault
+        block_start_string: "{%"
+        block_end_string: "%}"
+        variable_start_string: "[["
+        variable_end_string: "]]"
+        # validate:
+    - name: Template systemd unit
+      ansible.builtin.template:
+        src: vault.service.j2
+        dest: /etc/systemd/system/vault.service
+        mode: 0644
+        owner: root
+        group: root
+    - name: Enable Vault service
+      ansible.builtin.systemd:
+        name: vault
+        state: reloaded
+        enabled: true
+        masked: false
+        daemon_reload: true
