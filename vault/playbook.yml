@@ -24,11 +24,11 @@
         name: "{{ prerequisites }}"
         state: present
     - name: Ensure Vault Group
-      group:
+      ansible.builtin.group:
         name: vault
         state: present
     - name: Ensure Vault user
-      user:
+      ansible.builtin.user:
         name: vault
         comment: "Vault user added by Ansible"
         groups: vault
