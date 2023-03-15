@@ -8,7 +8,7 @@
     - name: Wait
       ansible.builtin.pause:
         seconds: 90
-    - name: force update
+    - name: Force update
       ansible.builtin.raw: apt-get -y update
       changed_when: false
   tasks:
