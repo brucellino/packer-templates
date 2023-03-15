@@ -13,6 +13,7 @@ jobs:
         template:
           - ubuntu-server
           - consul
+          - vault
     name: Validate
     runs-on: ubuntu-latest
     env:
