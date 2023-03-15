@@ -17,6 +17,7 @@
         seconds: 60
     - name: force update
       ansible.builtin.raw: apt-get -y update
+      changed_when: false
   tasks:
     - name: Ensure prerequisites
       ansible.builtin.package:
@@ -64,14 +65,14 @@
         variable_end_string: "]]"
         # validate:
     - name: Template systemd unit
-      anisble.builtin.template:
+      ansible.builtin.template:
         src: vault.service.j2
         dest: /etc/systemd/system/vault.service
         mode: 0644
         owner: root
         group: root
     - name: Enable Vault service
-      systemd:
+      ansible.builtin.systemd:
         name: vault
         state: reloaded
         enabled: true
