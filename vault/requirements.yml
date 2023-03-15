@@ -1,0 +1,3 @@
+# Ansible role requirements
+- name: consul
+  src: brucellino.consul

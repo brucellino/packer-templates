@@ -6,13 +6,14 @@
     consul_version: 1.15.0
   pre_tasks:
     - name: Wait
-      pause:
+      ansible.builtin.pause:
         seconds: 90
-    - name: force update
-      raw: apt-get -y update
+    - name: Force update
+      ansible.builtin.raw: apt-get -y update
+      changed_when: false
   tasks:
     - name: Get Consul
-      unarchive:
+      ansible.builtin.unarchive:
         src: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip"
         dest: /usr/bin/consul
         remote_src: true
@@ -20,18 +21,18 @@
         owner: root.
         group: rooot
     - name: Add Consul group
-      group:
+      ansible.builtin.group:
         name: consul
         state: present
     - name: Add Consul user
-      user:
+      ansible.builtin.user:
         name: consul
         group: consul
         groups: consul
         append: true
         state: present
     - name: Add configuration directory
-      file:
+      ansible.builtin.file:
         path: /etc/consul.d
         state: directory
         recurse: true
@@ -39,7 +40,7 @@
         owner: consul
         group: consul
     - name: Create Consul configuration
-      template:
+      ansible.builtin.template:
         src: consul.hcl.j2
         dest: /etc/consul.d/consul.hcl
         backup: true
@@ -52,7 +53,7 @@
         variable_end_string: "]]"
 
     - name: Create Systemd Unit
-      copy:
+      ansible.builtin.copy:
         dest: /etc/systemd/system/consul.service
         content: |
           [Unit]
@@ -82,10 +83,9 @@
         owner: true
         group: true
       notify: daemon-reload
-    - name: Start service
   handlers:
-    - name: daemin-reload
-      systemd:
+    - name: daemon-reload
+      ansible.builtin.systemd:
         name: consul
         state: started
         enabled: true
