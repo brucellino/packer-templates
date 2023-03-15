@@ -82,7 +82,6 @@
         owner: true
         group: true
       notify: daemon-reload
-    - name: Start service
   handlers:
     - name: daemin-reload
       systemd:
