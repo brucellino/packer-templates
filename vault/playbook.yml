@@ -7,6 +7,8 @@
     vault_config_dir: /etc/vault
     vault_bin_dir: /usr/local/bin
     raft_data_dir: /data/raft
+    tag_name: vault
+    autojoin_token: ""
     prerequisites:
       - jq
       - net-tools
@@ -15,7 +17,7 @@
     - name: Wait
       ansible.builtin.pause:
         seconds: 60
-    - name: force update
+    - name: Force update
       ansible.builtin.raw: apt-get -y update
       changed_when: false
   tasks:
