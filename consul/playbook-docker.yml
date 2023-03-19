@@ -5,9 +5,9 @@
   remote_user: root
   tasks:
     - name: Ensure python
-      raw: apt-get update
+      ansible.builtin.raw: apt-get update
     - name: Ensure python
-      raw: DEBIAN_FRONTEND=noninteractive apt-get install -y python3.9
+      ansible.builtin.raw: DEBIAN_FRONTEND=noninteractive apt-get install -y python3.9
 - hosts: all
   name: Deploy
   remote_user: root
@@ -29,7 +29,7 @@
       armv6l: armel
   tasks:
     - name: Ensure Prerequisites
-      package:
+      ansible.builtin.package:
         name: "{{ prerequisites }}"
         state: present
     - name: Get Consul
@@ -70,7 +70,7 @@
         variable_start_string: "[["
         variable_end_string: "]]"
     - name: Get Tini
-      get_url:
+      ansible.builtin.get_url:
         url: "https://github.com/krallin/tini/releases/download/{{ tini_version }}/tini-{{ tini_arch[ansible_architecture] }}"
         dest: "/tini"
         mode: 0777
