@@ -38,6 +38,13 @@
         state: present
         create_home: false
         generate_ssh_key: false
+    - name: Ensure Vault bin dir
+      file:
+        path: "{{ vault_bin_dir }}"
+        state: directory
+        mode: 0777
+        owner: root
+        group: root
     - name: Get Vault
       ansible.builtin.unarchive:
         src: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip"
