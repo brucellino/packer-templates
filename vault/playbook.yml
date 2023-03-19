@@ -13,6 +13,8 @@
       - jq
       - net-tools
       - curl
+      - unzip
+    region: "ams3"
   pre_tasks:
     - name: Wait
       ansible.builtin.pause:
@@ -38,10 +40,17 @@
         state: present
         create_home: false
         generate_ssh_key: false
+    - name: Ensure Vault bin dir
+      ansible.builtin.file:
+        path: "{{ vault_bin_dir }}"
+        state: directory
+        mode: 0777
+        owner: root
+        group: root
     - name: Get Vault
       ansible.builtin.unarchive:
         src: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip"
-        dest: "{{ vault_bin_dir }}/vault"
+        dest: "{{ vault_bin_dir }}"
         remote_src: true
         mode: 0777
         owner: root
@@ -61,8 +70,6 @@
         mode: 0660
         owner: vault
         group: vault
-        block_start_string: "{%"
-        block_end_string: "%}"
         variable_start_string: "[["
         variable_end_string: "]]"
         # validate:

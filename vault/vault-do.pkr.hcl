@@ -65,5 +65,9 @@ build {
   sources = ["source.digitalocean.server"]
   provisioner "ansible" {
     playbook_file = "playbook.yml"
+    extra_arguments = [
+      "--extra-vars",
+      "region=${var.region}"
+    ]
   }
 }
