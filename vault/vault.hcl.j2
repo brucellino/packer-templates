@@ -17,6 +17,7 @@ listener "tcp" {
   tls_disable = true
 }
 
+{% raw %}
 listener "tcp" {
   address = "{{ GetInterfaceIP \"eth0\" }}:8200"
   tls_disable = true
@@ -24,6 +25,7 @@ listener "tcp" {
 
 api_addr = "http://{{ GetInterfaceIP \"eth0\" }}:8200"
 cluster_addr = "http://{{ GetInterfaceIP \"eth0\" }}:8201"
+{% endraw %}
 
 {% if consul_agent | default (false) %}
 service_registration "consul" {
