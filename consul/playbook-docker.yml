@@ -6,8 +6,10 @@
   tasks:
     - name: Ensure python
       ansible.builtin.raw: apt-get update
+      changed_when: false
     - name: Ensure python
       ansible.builtin.raw: DEBIAN_FRONTEND=noninteractive apt-get install -y python3.9
+      changed_when: false
 - hosts: all
   name: Deploy
   remote_user: root
