@@ -1,0 +1,78 @@
+---
+- hosts: all
+  name: Prepare
+  gather_facts: false
+  remote_user: root
+  tasks:
+    - name: Ensure python
+      raw: apt-get update
+    - name: Ensure python
+      raw: DEBIAN_FRONTEND=noninteractive apt-get install -y python3.9
+- hosts: all
+  name: Deploy
+  remote_user: root
+  vars:
+    prerequisites:
+      - tar
+      - unzip
+      - curl
+    consul_version: 1.15.0
+    consul_arch:
+      x86_64: amd64
+      aarch64: arm64
+    consul_data_dir: "/opt/consul"
+    server_encrypt_key: "."
+    tini_version: v0.19.0
+    tini_arch:
+      x86_64: amd64
+      aarch64: arm64
+      armv6l: armel
+  tasks:
+    - name: Ensure Prerequisites
+      package:
+        name: "{{ prerequisites }}"
+        state: present
+    - name: Get Consul
+      ansible.builtin.unarchive:
+        src: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_{{ consul_arch[ansible_architecture] }}.zip"
+        dest: /bin/
+        remote_src: true
+        mode: 0777
+        owner: root
+        group: root
+    - name: Add Consul group
+      ansible.builtin.group:
+        name: consul
+        state: present
+    - name: Add Consul user
+      ansible.builtin.user:
+        name: consul
+        group: consul
+        groups: consul
+        append: true
+        state: present
+    - name: Add configuration directory
+      ansible.builtin.file:
+        path: /etc/consul.d
+        state: directory
+        recurse: true
+        mode: 0644
+        owner: consul
+        group: consul
+    - name: Create Consul configuration
+      ansible.builtin.template:
+        src: consul.hcl.j2
+        dest: /etc/consul.d/consul.hcl
+        backup: true
+        mode: 0644
+        owner: consul
+        group: consul
+        variable_start_string: "[["
+        variable_end_string: "]]"
+    - name: Get Tini
+      get_url:
+        url: "https://github.com/krallin/tini/releases/download/{{ tini_version }}/tini-{{ tini_arch[ansible_architecture] }}"
+        dest: "/tini"
+        mode: 0777
+        owner: root
+        group: root
