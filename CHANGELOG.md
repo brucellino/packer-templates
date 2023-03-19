@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/brucellino/packer-templates/compare/v1.2.0...v1.3.0) (2023-03-19)
+
+
+### Bug Fixes
+
+* **vault:** ensure that vault binary dir is present ([#34](https://github.com/brucellino/packer-templates/issues/34)) ([19dd1b1](https://github.com/brucellino/packer-templates/commit/19dd1b1ff75704f07ed43a6a3ea42baa957a5088))
+
+
+### Features
+
+* add vault ([#27](https://github.com/brucellino/packer-templates/issues/27)) ([90b3469](https://github.com/brucellino/packer-templates/commit/90b34691aca39815641353adf3af6afa7ec2a995))
+
 # [1.2.0](https://github.com/brucellino/packer-templates/compare/v1.1.0...v1.2.0) (2022-12-23)
 
 
