@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/brucellino/packer-templates/compare/v1.3.0...v1.4.0) (2023-03-22)
+
+
+### Features
+
+* **consul:** add container playbook ([#35](https://github.com/brucellino/packer-templates/issues/35)) ([fef0593](https://github.com/brucellino/packer-templates/commit/fef0593d28bfbb61ee27eb99d5fa68e741518421))
+
 # [1.3.0](https://github.com/brucellino/packer-templates/compare/v1.2.0...v1.3.0) (2023-03-19)
 
 
