@@ -22,7 +22,7 @@ MarkupSafe==2.0.1
 numpy==1.22.4
 packaging==20.9
 paramiko==2.8.1
-pluggy==0.13.1
+pluggy==1.0.0
 py==1.11.0
 pycparser==2.20
 Pygments==2.14.0
