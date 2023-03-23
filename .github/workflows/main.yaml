@@ -9,6 +9,7 @@ on:
 jobs:
   validate:
     strategy:
+      fail-fast: false
       matrix:
         template:
           - ubuntu-server
