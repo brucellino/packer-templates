@@ -4,3 +4,49 @@ encrypt = "[[ server_encrypt_key ]]"
 verify_incoming = true
 verify_outgoing = true
 verify_server_hostname = true
+dns_port =
+
+# Logging
+## Logging is defined at directory level
+log_file = "/home/consul/"
+log_rotate_duration = "24h"
+log_rotate_bytes = 10485760
+log_rotate_max_files = 30
+
+auto_encrypt {
+  tls = true
+}
+
+verify_incoming = false
+verify_outgoing = false
+verify_server_hostname = false
+
+recursors = ["8.8.8.8"]
+# Advertise on tailscale if it is available
+
+# Enable Consul ACLs
+acl = {
+  enabled = true
+  default_policy = "allow"
+  enable_token_persistence = true
+}
+
+telemetry {
+  prometheus_retention_time = "60s"
+}
+
+# Allow bind on all interfaces
+bind_addr = "0.0.0.0"
+
+# Allow client to respond to requests on all interfaces
+client_addr = "0.0.0.0"
+# Name of the datacenter
+datacenter = "dc1"
+# Path to where Consul will store its data
+data_dir = "[[ consul_data_dir ]]"
+disable_remote_exec = false
+discovery_max_stale = "10m"
+
+dns_config {
+  allow_stale = true
+}
