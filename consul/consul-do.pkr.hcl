@@ -4,9 +4,17 @@ packer {
       version = ">= v1.1.0"
       source  = "github.com/digitalocean/digitalocean"
     }
+    docker = {
+      version = ">= v1.0.8"
+      source  = "github.com/hashicorp/docker"
+    }
   }
 }
-
+variable "consul_version" {
+  description = "Version of Consul to install"
+  default     = "1.15.0"
+  type        = string
+}
 variable "region" {
   type      = string
   default   = "ams3"
@@ -29,11 +37,26 @@ local "do_token" {
   sensitive  = true
 }
 
+local "docker_registry_pass" {
+  expression = vault("kv/data/github", "ghcr_token")
+  sensitive  = true
+}
+
+local "docker_registry_username" {
+  expression = "brucellino"
+  sensitive  = false
+}
 
 variable "vpc_uuid" {
   type      = string
   sensitive = false
   default   = "08a4d3ad-a229-40dd-8dd4-042bda3e09bc" # this is only available in AMS3 - a map is needed.
+}
+
+variable "docker_base_image" {
+  type      = string
+  sensitive = false
+  default   = "public.ecr.aws/lts/ubuntu:focal"
 }
 
 data "digitalocean-image" "base-ubuntu" {
@@ -60,10 +83,53 @@ source "digitalocean" "server" {
   vpc_uuid           = var.vpc_uuid
 }
 
+source "docker" "server" {
+  image  = var.docker_base_image
+  commit = true
+  changes = [
+    "USER consul",
+    "WORKDIR /home/consul",
+    "EXPOSE 8500 8501",
+    "LABEL consul_version=${var.consul_version}",
+    "LABEL org.opencontainers.image.source=https://github.com/brucellino/packer-templates",
+    "LABEL org.opencontainers.image.description=\"Consul ${var.consul_version} image\"",
+    "ENTRYPOINT [\"/tini\", \"--\"]",
+    "VOLUME /opt/consul",
+    "CMD [\"/bin/consul\", \"agent\", \"-config-dir=/etc/consul.d/\"]"
+  ]
+  author = "brucellino@proton.me"
+  volumes = {
+    consul_data = "/opt/consul"
+  }
+  run_command = ["-d", "-i", "-t", "--entrypoint=/bin/bash", "--name=consul", "--", "{{.Image}}"]
+}
+
 build {
-  name    = "server"
+  name    = "server-consul"
   sources = ["source.digitalocean.server"]
   provisioner "ansible" {
-    playbook_file = "playbook.yml"
+    playbook_file   = "playbook.yml"
+    extra_arguments = ["--extra-vars", "consul_version=${var.consul_version}"]
+  }
+}
+
+build {
+  name    = "server-docker"
+  sources = ["source.docker.server"]
+  provisioner "ansible" {
+    playbook_file   = "playbook-docker.yml"
+    extra_arguments = ["--extra-vars", "consul_version=${var.consul_version}"]
+  }
+  post-processors {
+    post-processor "docker-tag" {
+      repository = "ghcr.io/brucellino/consul"
+      tags       = ["latest"]
+    }
+    post-processor "docker-push" {
+      login          = true
+      login_password = local.docker_registry_pass
+      login_username = local.docker_registry_username
+      login_server   = "https://ghcr.io/${local.docker_registry_username}"
+    }
   }
 }
