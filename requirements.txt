@@ -2,7 +2,7 @@
 ansible==7.3.0
 ansible-lint==5.4.0
 attrs==21.2.0
-awxkit==19.4.0
+awxkit==21.14.0
 bcrypt==4.0.1
 bracex==2.3.post1
 certifi==2022.12.7
