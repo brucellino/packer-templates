@@ -12,7 +12,7 @@ commonmark==0.9.1
 cryptography==39.0.2
 docutils==0.17.1
 enrich==1.2.7
-hvac==1.0.2
+hvac==1.1.0
 identify==2.5.1
 idna==3.3
 iniconfig==1.1.1
