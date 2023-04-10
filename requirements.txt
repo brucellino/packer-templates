@@ -19,7 +19,7 @@ iniconfig==1.1.1
 Jinja2==3.0.1
 jmespath==1.0.1
 MarkupSafe==2.0.1
-numpy==1.22.4
+numpy==1.24.2
 packaging==20.9
 paramiko==2.8.1
 pluggy==1.0.0
