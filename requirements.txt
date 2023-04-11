@@ -1,5 +1,5 @@
 # Python requirements
-ansible==7.3.0
+ansible==7.4.0
 ansible-lint==6.14.4
 attrs==21.2.0
 awxkit==22.0.0
@@ -20,7 +20,7 @@ Jinja2==3.0.1
 jmespath==1.0.1
 MarkupSafe==2.0.1
 numpy==1.24.2
-packaging==20.9
+packaging==21.3
 paramiko==2.8.1
 pluggy==1.0.0
 py==1.11.0
