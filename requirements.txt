@@ -20,7 +20,7 @@ Jinja2==3.0.1
 jmespath==1.0.1
 MarkupSafe==2.0.1
 numpy==1.22.4
-packaging==20.9
+packaging==21.3
 paramiko==2.8.1
 pluggy==1.0.0
 py==1.11.0
