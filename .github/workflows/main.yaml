@@ -20,6 +20,7 @@ jobs:
     env:
       VAULT_ADDR: http://localhost:8200
       VAULT_TOKEN: token
+      PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
