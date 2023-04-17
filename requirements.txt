@@ -15,7 +15,7 @@ enrich==1.2.7
 hvac==1.1.0
 identify==2.5.1
 idna==3.4
-iniconfig==1.1.1
+iniconfig==2.0.0
 Jinja2==3.0.1
 jmespath==1.0.1
 MarkupSafe==2.0.1
