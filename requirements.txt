@@ -10,12 +10,12 @@ cffi==1.15.1
 charset-normalizer==2.0.9
 commonmark==0.9.1
 cryptography==39.0.2
-docutils==0.17.1
+docutils==0.19
 enrich==1.2.7
 hvac==1.1.0
 identify==2.5.1
 idna==3.4
-iniconfig==1.1.1
+iniconfig==2.0.0
 Jinja2==3.0.1
 jmespath==1.0.1
 MarkupSafe==2.0.1
@@ -25,7 +25,7 @@ paramiko==2.8.1
 pluggy==1.0.0
 py==1.11.0
 pycparser==2.20
-Pygments==2.14.0
+Pygments==2.15.1
 pyhcl==0.4.4
 PyNaCl==1.5.0
 pyparsing==2.4.7
@@ -33,7 +33,7 @@ pytest==7.2.2
 pytest-testinfra==7.0.0
 python-consul==1.1.0
 PyYAML==6.0
-requests==2.28.1
+requests==2.28.2
 resolvelib==0.5.4
 rich==13.3.4
 ruamel.yaml==0.17.21
