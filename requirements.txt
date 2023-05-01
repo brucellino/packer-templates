@@ -44,4 +44,4 @@ smbus2==0.4.2
 tenacity==8.0.1
 toml==0.10.2
 urllib3==1.26.7
-wcmatch==8.3
+wcmatch==8.4.1
