@@ -43,5 +43,5 @@ six==1.16.0
 smbus2==0.4.2
 tenacity==8.0.1
 toml==0.10.2
-urllib3==1.26.7
+urllib3==2.0.2
 wcmatch==8.4.1
