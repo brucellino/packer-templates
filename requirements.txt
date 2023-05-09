@@ -20,7 +20,7 @@ Jinja2==3.0.1
 jmespath==1.0.1
 MarkupSafe==2.1.2
 numpy==1.24.3
-packaging==21.3
+packaging==23.1
 paramiko==2.8.1
 pluggy==1.0.0
 py==1.11.0
@@ -43,5 +43,5 @@ six==1.16.0
 smbus2==0.4.2
 tenacity==8.0.1
 toml==0.10.2
-urllib3==1.26.7
+urllib3==2.0.2
 wcmatch==8.4.1
