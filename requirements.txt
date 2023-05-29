@@ -1,5 +1,5 @@
 # Python requirements
-ansible==7.5.0
+ansible==7.6.0
 ansible-lint==6.16.2
 attrs==23.1.0
 awxkit==22.0.0
