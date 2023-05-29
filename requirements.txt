@@ -13,7 +13,7 @@ cryptography==40.0.2
 docutils==0.20.1
 enrich==1.2.7
 hvac==1.1.0
-identify==2.5.23
+identify==2.5.24
 idna==3.4
 iniconfig==2.0.0
 Jinja2==3.1.2
