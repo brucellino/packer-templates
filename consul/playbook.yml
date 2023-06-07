@@ -17,7 +17,7 @@
         src: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip"
         dest: /usr/bin/consul
         remote_src: true
-        mode: 0777
+        mode: "0777"
         owner: root.
         group: rooot
     - name: Add Consul group
@@ -36,7 +36,7 @@
         path: /etc/consul.d
         state: directory
         recurse: true
-        mode: 0644
+        mode: "0644"
         owner: consul
         group: consul
     - name: Create Consul configuration
@@ -44,7 +44,7 @@
         src: consul.hcl.j2
         dest: /etc/consul.d/consul.hcl
         backup: true
-        mode: 0644
+        mode: "0644"
         owner: consul
         group: consul
         block_start_string: "[%"
@@ -79,12 +79,12 @@
 
         backup: false
         force: true
-        mode: 0644
+        mode: "0644"
         owner: true
         group: true
-      notify: daemon-reload
+      notify: Daemon-reload
   handlers:
-    - name: daemon-reload
+    - name: Daemon-reload
       ansible.builtin.systemd:
         name: consul
         state: started
