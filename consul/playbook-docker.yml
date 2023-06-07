@@ -39,7 +39,7 @@
         src: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_{{ consul_arch[ansible_architecture] }}.zip"
         dest: /bin/
         remote_src: true
-        mode: 0777
+        mode: "0777"
         owner: root
         group: root
     - name: Add Consul group
@@ -58,7 +58,7 @@
         path: /etc/consul.d
         state: directory
         recurse: true
-        mode: 0644
+        mode: "0644"
         owner: consul
         group: consul
     - name: Create Consul configuration
@@ -66,7 +66,7 @@
         src: consul.hcl.j2
         dest: /etc/consul.d/consul.hcl
         backup: true
-        mode: 0644
+        mode: "0644"
         owner: consul
         group: consul
         variable_start_string: "[["
@@ -75,6 +75,6 @@
       ansible.builtin.get_url:
         url: "https://github.com/krallin/tini/releases/download/{{ tini_version }}/tini-{{ tini_arch[ansible_architecture] }}"
         dest: "/tini"
-        mode: 0777
+        mode: "0777"
         owner: root
         group: root

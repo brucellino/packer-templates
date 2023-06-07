@@ -44,7 +44,7 @@
       ansible.builtin.file:
         path: "{{ vault_bin_dir }}"
         state: directory
-        mode: 0777
+        mode: "0777"
         owner: root
         group: root
     - name: Get Vault
@@ -52,7 +52,7 @@
         src: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip"
         dest: "{{ vault_bin_dir }}"
         remote_src: true
-        mode: 0777
+        mode: "0777"
         owner: root
         group: root
     - name: Ensure Vault Configuration Directory
@@ -60,14 +60,14 @@
         path: "{{ vault_config_dir }}"
         state: directory
         recurse: true
-        mode: 0770
+        mode: "0770"
         owner: vault
         group: vault
     - name: Template Vault Configuration
       ansible.builtin.template:
         src: vault.hcl.j2
         dest: "{{ vault_config_dir }}/vault.hcl"
-        mode: 0660
+        mode: "0660"
         owner: vault
         group: vault
         variable_start_string: "[["
@@ -77,7 +77,7 @@
       ansible.builtin.template:
         src: vault.service.j2
         dest: /etc/systemd/system/vault.service
-        mode: 0644
+        mode: "0644"
         owner: root
         group: root
     - name: Enable Vault service
