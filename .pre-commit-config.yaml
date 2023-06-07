@@ -10,7 +10,7 @@ repos:
       - id: check-added-large-files
       - id: mixed-line-ending
   - repo: https://github.com/syntaqx/git-hooks
-    rev: v0.0.17
+    rev: v0.0.18
     hooks:
       - id: forbid-binary
       - id: shfmt
@@ -21,7 +21,7 @@ repos:
       - id: detect-secrets
         args: ["--baseline", ".secrets.baseline"]
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.23.0
+    rev: 0.23.1
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
@@ -31,6 +31,12 @@ repos:
       - id: commitlint
         stages: [commit-msg]
         additional_dependencies: ['@commitlint/config-conventional']
+  - repo: https://github.com/ansible-community/ansible-lint
+    rev: v6.17.0
+    hooks:
+      - id: ansible-lint
+        files: playbook.*\.yml
+        args: ["--exclude", ".github"]
   - repo: local
     hooks:
       - id: packer-fmt
