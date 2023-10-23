@@ -32,7 +32,7 @@ repos:
         stages: [commit-msg]
         additional_dependencies: ['@commitlint/config-conventional']
   - repo: https://github.com/ansible-community/ansible-lint
-    rev: v6.20.3
+    rev: v6.21.1
     hooks:
       - id: ansible-lint
         args: ["--exclude", ".github"]
