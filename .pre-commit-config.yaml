@@ -24,7 +24,7 @@ repos:
     rev: 0.27.0
     hooks:
       - id: check-github-workflows
-      - id: check-github-actions
+      - id: check-renovate
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v9.5.0
     hooks:
@@ -41,8 +41,7 @@ repos:
       - id: packer-fmt
         name: Packer Format
         language: system
-        types:
-          - hcl
+        files: ^\.pkr.hcl
         entry: packer fmt
 ci:
   autoupdate_branch: main

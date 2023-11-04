@@ -1,6 +1,6 @@
 ---
-- hosts: all
-  name: Prepare
+- name: Prepare
+  hosts: all
   gather_facts: false
   remote_user: root
   tasks:
@@ -10,8 +10,9 @@
     - name: Ensure python
       ansible.builtin.raw: DEBIAN_FRONTEND=noninteractive apt-get install -y python3.9
       changed_when: false
-- hosts: all
-  name: Deploy
+
+- name: Deploy
+  hosts: all
   remote_user: root
   vars:
     prerequisites:

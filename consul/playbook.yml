@@ -1,6 +1,6 @@
 ---
-- hosts: all
-  name: Setup
+- name: Setup
+  hosts: all
   become: true
   vars:
     consul_version: 1.15.0
