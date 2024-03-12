@@ -1,5 +1,11 @@
 packer {
   required_version = ">=1.7.0"
+  required_plugins {
+    docker = {
+      source = "github.com/hashicorp/docker"
+      version = "~> 1"
+    }
+  }
 }
 
 variable "version" {

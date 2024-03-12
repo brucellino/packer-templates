@@ -30,7 +30,9 @@ repos:
     hooks:
       - id: commitlint
         stages: [commit-msg]
-        additional_dependencies: ['@commitlint/config-conventional']
+        additional_dependencies:
+          - "@commitlint/config-conventional"
+          - "@commitlint/cli"
   - repo: https://github.com/ansible-community/ansible-lint
     rev: v24.2.0
     hooks:

@@ -3,7 +3,7 @@
   hosts: all
   become: true
   vars:
-    vault_version: 1.13.0
+    vault_version: 1.15.1
     vault_config_dir: /etc/vault
     vault_bin_dir: /usr/local/bin
     raft_data_dir: /data/raft
@@ -16,12 +16,11 @@
       - unzip
     region: "ams3"
   pre_tasks:
-    - name: Wait
-      ansible.builtin.pause:
-        seconds: 60
-    - name: Force update
-      ansible.builtin.raw: apt-get -y update
-      changed_when: false
+    - name: Wait for cloud-init to finish
+      ansible.builtin.wait_for:
+        state: present
+        path: /var/log/cloud-init-output.log
+        search_regex: "^Cloud-init.*finished.*$"
   tasks:
     - name: Ensure prerequisites
       ansible.builtin.package:

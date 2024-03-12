@@ -1,8 +1,12 @@
 packer {
   required_plugins {
     digitalocean = {
-      version = ">= v1.1.0"
+      version = ">= v1.2.0"
       source  = "github.com/digitalocean/digitalocean"
+    }
+    ansible = {
+      version = "~> 1"
+      source = "github.com/hashicorp/ansible"
     }
   }
 }
@@ -21,7 +25,7 @@ variable "size" {
 variable "base_image_name" {
   type      = string
   sensitive = false
-  default   = "20.04 (LTS) x64"
+  default   = "23.10 x64"
 }
 
 local "do_token" {
@@ -29,6 +33,14 @@ local "do_token" {
   sensitive  = true
 }
 
+local "autojoin_token" {
+  expression = vault("digitalocean/data/tokens", "vault_auto_join")
+  sensitive = true
+}
+
+local "build_tag" {
+  expression = join("-", ["created", "at", formatdate("YYYY-MM-DD-hh-mm", timestamp())])
+}
 
 variable "vpc_uuid" {
   type      = string
@@ -56,7 +68,7 @@ source "digitalocean" "server" {
   monitoring         = true
   private_networking = true
   droplet_name       = "vault-build-${formatdate("YYYY-MM-DD-hh-mm", timestamp())}"
-  tags               = ["packer", "vault"]
+  tags               = ["packer", "vault", "auto-destroy", local.build_tag]
   vpc_uuid           = var.vpc_uuid
 }
 
@@ -67,7 +79,15 @@ build {
     playbook_file = "playbook.yml"
     extra_arguments = [
       "--extra-vars",
-      "region=${var.region}"
+      "region=${var.region}",
+      "--extra-vars",
+      "autojoin_token=${local.autojoin_token}"
+    ]
+  }
+  provisioner "shell" {
+    inline = [
+      "ls -lht /etc/vault.d",
+      "cat /etc/vault.d/vault.hcl"
     ]
   }
 }
