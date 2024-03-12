@@ -44,6 +44,8 @@ jobs:
           ${HOME}/bin/vault secrets enable -path="kv" kv-v2
       - name: Populate the DO secret
         run: ${HOME}/bin/vault kv put -mount="digitalocean" tokens packer=${{ secrets.DO_TOKEN }}
+      - name: Populate vault autojoin token
+        run: ${HOME}/bin/vault kv patch -mount="digitalocean" tokens vault_auto_join=${{ secrets.DO_TOKEN }}
       - name: Populate the GH secret
         run: ${HOME}/bin/vault kv put -mount="kv" github ghcr_token=${{ secrets.GITHUB_TOKEN }}
       - name: Populate Consul Encryption Key
