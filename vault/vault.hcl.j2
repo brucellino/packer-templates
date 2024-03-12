@@ -1,3 +1,5 @@
+ui = true
+
 storage "raft" {
  path = "[[ raft_data_dir ]]"
  node_id = "digitalocean-host"
@@ -19,12 +21,12 @@ listener "tcp" {
 
 {% raw %}
 listener "tcp" {
-  address = "{{ GetInterfaceIP \"eth0\" }}:8200"
+  address = "{{ GetInterfaceIP \"eth1\" }}:8200"
   tls_disable = true
 }
 
-api_addr = "http://{{ GetInterfaceIP \"eth0\" }}:8200"
-cluster_addr = "http://{{ GetInterfaceIP \"eth0\" }}:8201"
+api_addr = "http://{{ GetInterfaceIP \"eth1\" }}:8200"
+cluster_addr = "http://{{ GetInterfaceIP \"eth1\" }}:8201"
 {% endraw %}
 
 {% if consul_agent | default (false) %}
@@ -36,4 +38,8 @@ service_registration "consul" {
 }
 {% endif %}
 
-ui = true
+
+telemetry {
+  disable_hostname = false
+  prometheus_retention_time = "24h"
+}
