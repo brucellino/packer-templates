@@ -1,10 +1,12 @@
 datacenter = "dc1"
-data_dir = "/opt/consul"
+data_dir = "/opt/consul/data"
+
+auto_reload_config = true
+
 encrypt = "[[ server_encrypt_key ]]"
 verify_incoming = true
 verify_outgoing = true
 verify_server_hostname = true
-dns_port =
 
 # Logging
 ## Logging is defined at directory level
@@ -13,8 +15,16 @@ log_rotate_duration = "24h"
 log_rotate_bytes = 10485760
 log_rotate_max_files = 30
 
-auto_encrypt {
-  tls = true
+bootstrap_expect = 1
+
+ports {
+  dns = 8600
+  http = 8500
+  https = 8443
+  grpc_tls = 8503
+  grpc = 8502
+  serf_lan = 8301
+  server = 8300
 }
 
 verify_incoming = false
@@ -22,7 +32,10 @@ verify_outgoing = false
 verify_server_hostname = false
 
 recursors = ["8.8.8.8"]
-# Advertise on tailscale if it is available
+# Advertise on tailscale if it is available, for now advertise on all devices.
+# advertise_addr = "0.0.0.0"
+
+rejoin_after_leave = false
 
 # Enable Consul ACLs
 acl = {
@@ -30,6 +43,8 @@ acl = {
   default_policy = "allow"
   enable_token_persistence = true
 }
+
+server = [[ is_server | bool | default(true) | lower ]]
 
 telemetry {
   prometheus_retention_time = "60s"
@@ -49,4 +64,13 @@ discovery_max_stale = "10m"
 
 dns_config {
   allow_stale = true
+}
+
+autopilot {
+  cleanup_dead_servers = true
+  last_contact_threshold = "10s"
+  server_stabilization_time = "20s"
+}
+ui_config {
+  enabled = true
 }
