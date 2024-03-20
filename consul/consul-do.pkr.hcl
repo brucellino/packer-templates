@@ -19,6 +19,11 @@ variable "consul_version" {
   default     = "1.15.0"
   type        = string
 }
+
+local "gossip_key" {
+  expression = vault("digitalocean/data/consul", "consul_gossip_key")
+}
+
 variable "region" {
   type      = string
   default   = "ams3"
@@ -60,7 +65,7 @@ variable "vpc_uuid" {
 variable "docker_base_image" {
   type      = string
   sensitive = false
-  default   = "public.ecr.aws/lts/ubuntu:focal"
+  default   = "public.ecr.aws/docker/library/alpine:3.18"
 }
 
 data "digitalocean-image" "base-ubuntu" {
@@ -93,19 +98,19 @@ source "docker" "server" {
   changes = [
     "USER consul",
     "WORKDIR /home/consul",
-    "EXPOSE 8500 8501",
+    "EXPOSE 8500 8501 8502 8503 8443 8600 8601",
     "LABEL consul_version=${var.consul_version}",
     "LABEL org.opencontainers.image.source=https://github.com/brucellino/packer-templates",
     "LABEL org.opencontainers.image.description=\"Consul ${var.consul_version} image\"",
-    "ENTRYPOINT [\"/tini\", \"--\"]",
-    "VOLUME /opt/consul",
+    "ENTRYPOINT [\"tini\", \"--\"]",
+    "VOLUME /opt/consul/data",
     "CMD [\"/bin/consul\", \"agent\", \"-config-dir=/etc/consul.d/\"]"
   ]
   author = "brucellino@proton.me"
   volumes = {
-    consul_data = "/opt/consul"
+    consul_data = "/opt/consul/data"
   }
-  run_command = ["-d", "-i", "-t", "--entrypoint=/bin/bash", "--name=consul", "--", "{{.Image}}"]
+  run_command = ["-d", "-i", "-t", "--entrypoint=/bin/sh", "--name=consul", "--", "{{.Image}}"]
 }
 
 build {
@@ -113,7 +118,11 @@ build {
   sources = ["source.digitalocean.server"]
   provisioner "ansible" {
     playbook_file   = "playbook.yml"
-    extra_arguments = ["--extra-vars", "consul_version=${var.consul_version}"]
+    extra_arguments = [
+      "--extra-vars",
+      "consul_version=${var.consul_version}",
+      "is_server=true"
+      ]
   }
 }
 
@@ -122,12 +131,17 @@ build {
   sources = ["source.docker.server"]
   provisioner "ansible" {
     playbook_file   = "playbook-docker.yml"
-    extra_arguments = ["--extra-vars", "consul_version=${var.consul_version}"]
+    extra_arguments = [
+      "--extra-vars", "consul_version=${var.consul_version}",
+      "-e", "is_server=true",
+      "-e", "server_encrypt_key=${local.gossip_key}"
+    ]
   }
+
   post-processors {
     post-processor "docker-tag" {
       repository = "ghcr.io/brucellino/consul"
-      tags       = ["latest"]
+      tags       = ["${var.consul_version}-latest"]
     }
     post-processor "docker-push" {
       login          = true

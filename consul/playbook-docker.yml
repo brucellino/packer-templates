@@ -4,11 +4,11 @@
   gather_facts: false
   remote_user: root
   tasks:
+    # - name: Update cache
+    #   ansible.builtin.raw: apt-get update
+    #   changed_when: false
     - name: Ensure python
-      ansible.builtin.raw: apt-get update
-      changed_when: false
-    - name: Ensure python
-      ansible.builtin.raw: DEBIAN_FRONTEND=noninteractive apt-get install -y python3.9
+      ansible.builtin.raw: apk add python3
       changed_when: false
 
 - name: Deploy
@@ -19,17 +19,11 @@
       - tar
       - unzip
       - curl
-    consul_version: 1.15.0
+      - tini
     consul_arch:
       x86_64: amd64
       aarch64: arm64
     consul_data_dir: "/opt/consul"
-    server_encrypt_key: "."
-    tini_version: v0.19.0
-    tini_arch:
-      x86_64: amd64
-      aarch64: arm64
-      armv6l: armel
   tasks:
     - name: Ensure Prerequisites
       ansible.builtin.package:
@@ -59,7 +53,7 @@
         path: /etc/consul.d
         state: directory
         recurse: true
-        mode: "0644"
+        mode: "0775"
         owner: consul
         group: consul
     - name: Create Consul configuration
@@ -72,10 +66,17 @@
         group: consul
         variable_start_string: "[["
         variable_end_string: "]]"
-    - name: Get Tini
-      ansible.builtin.get_url:
-        url: "https://github.com/krallin/tini/releases/download/{{ tini_version }}/tini-{{ tini_arch[ansible_architecture] }}"
-        dest: "/tini"
-        mode: "0777"
-        owner: root
-        group: root
+    - name: Ensure data dir is writable
+      ansible.builtin.file:
+        path: /opt/consul
+        state: directory
+        owner: consul
+        group: consul
+        mode: "0775"
+- name: Remove Python3
+  hosts: all
+  tasks:
+    - name: Ensure python is absent
+      ansible.builtin.package:
+        name: python3
+        state: absent
