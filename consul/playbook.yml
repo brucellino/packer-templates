@@ -80,8 +80,8 @@
         backup: false
         force: true
         mode: "0644"
-        owner: true
-        group: true
+        owner: root
+        group: root
       notify: Daemon-reload
   handlers:
     - name: Daemon-reload

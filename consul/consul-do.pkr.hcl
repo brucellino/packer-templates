@@ -21,7 +21,7 @@ variable "consul_version" {
 }
 
 local "gossip_key" {
-  expression = vault("kv/data/do", "consul_gossip_key")
+  expression = vault("digitalocean/data/consul", "consul_gossip_key")
 }
 
 variable "region" {
