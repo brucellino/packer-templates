@@ -21,7 +21,7 @@ repos:
       - id: detect-secrets
         args: ["--baseline", ".secrets.baseline"]
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.28.6
+    rev: 0.29.0
     hooks:
       - id: check-github-workflows
       - id: check-renovate
@@ -34,7 +34,7 @@ repos:
           - "@commitlint/config-conventional"
           - "@commitlint/cli"
   - repo: https://github.com/ansible-community/ansible-lint
-    rev: v24.6.1
+    rev: v24.7.0
     hooks:
       - id: ansible-lint
         args: ["--exclude", ".github"]
