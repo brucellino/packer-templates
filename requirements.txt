@@ -1,6 +1,6 @@
 # Python requirements
 ansible-lint==24.7.0
-ansible==10.2.0
+ansible==10.3.0
 pyhcl==0.4.5
 pytest==8.3.2
 pytest-testinfra==10.1.1
