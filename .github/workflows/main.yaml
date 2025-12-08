@@ -40,8 +40,6 @@ jobs:
         run: mise tasks run install
       - name: Run ansible-lint
         run: mise exec -- ansible-lint ${{ matrix.template }}
-      - name: Create bin dir for cached binaries
-        run: mkdir "${HOME}/bin"
       - name: Start Vault Server
         run: |
           mise exec -- vault server -dev -dev-root-token-id=${VAULT_TOKEN} | tee vault-output.txt &
