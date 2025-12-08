@@ -3,7 +3,7 @@ ansible-lint
 ansible==13.0.0
 ansible-core
 pyhcl==0.4.5
-pytest==8.4.2
+pytest==9.0.2
 pytest-testinfra==10.2.2
 python-consul==1.1.0
 pre-commit
