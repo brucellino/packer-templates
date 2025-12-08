@@ -27,7 +27,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Run ansible-lint
-        uses: ansible/ansible-lint-action@v6.17.0
+        uses: ansible-actions/ansible-lint-action@v1.1.0
         with:
           path: "${{ matrix.template }}"
       - name: Create bin dir for cached binaries
@@ -84,7 +84,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
+          node-version: "lts/*"
       - name: Install dependencies
         run: |
           npm install -D \
