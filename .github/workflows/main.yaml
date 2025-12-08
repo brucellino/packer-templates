@@ -20,14 +20,22 @@ jobs:
     env:
       VAULT_ADDR: http://localhost:8200
       VAULT_TOKEN: token
+      MISE_ENV: github-actions
       PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          install: true
+          experimental: true
+      - name: Install dependencies
+        run: mise tasks run install
       - name: Run ansible-lint
-        uses: ansible-actions/ansible-lint-action@v1.1.0
+        run: ansible-lint ${{ matrix.template }}
         with:
           target: "${{ matrix.template }}"
       - name: Create bin dir for cached binaries
