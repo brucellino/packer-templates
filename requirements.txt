@@ -2,6 +2,6 @@
 ansible-lint==25.11.1
 ansible==13.0.0
 pyhcl==0.4.5
-pytest==9.0.1
+pytest==9.0.2
 pytest-testinfra==10.2.2
 python-consul==1.1.0
