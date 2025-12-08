@@ -29,7 +29,7 @@ jobs:
       - name: Run ansible-lint
         uses: ansible-actions/ansible-lint-action@v1.1.0
         with:
-          path: "${{ matrix.template }}"
+          target: "${{ matrix.template }}"
       - name: Create bin dir for cached binaries
         run: mkdir "${HOME}/bin"
       - name: Start Vault Server
