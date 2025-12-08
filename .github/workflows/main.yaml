@@ -32,15 +32,19 @@ jobs:
         with:
           install: true
           experimental: true
+      - name: Activate mise
+        run: echo 'eval "$(mise activate bash)"' >> ~/.bashrc
+      - name: Check Mise
+        run: mise doctor
       - name: Install dependencies
         run: mise tasks run install
       - name: Run ansible-lint
-        run: ansible-lint ${{ matrix.template }}
+        run: mise exec -- ansible-lint ${{ matrix.template }}
       - name: Create bin dir for cached binaries
         run: mkdir "${HOME}/bin"
       - name: Start Vault Server
         run: |
-          vault server -dev -dev-root-token-id=${VAULT_TOKEN} | tee vault-output.txt &
+          mise exec -- vault server -dev -dev-root-token-id=${VAULT_TOKEN} | tee vault-output.txt &
       - name: Enable Secrets mounts
         run: |
           vault secrets enable -path="digitalocean" -description="KV data" kv-v2 ; \
