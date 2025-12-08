@@ -1,0 +1,15 @@
+[env]
+_.python.venv = { path = ".venv", create = true }
+
+[tools]
+uv = "latest"
+packer = "latest"
+python = "3.13"
+
+
+[settings]
+python.uv_venv_auto = true
+
+[tasks.install]
+description = "Install dependencies"
+run = "uv pip install -r requirements.txt"

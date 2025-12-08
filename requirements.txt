@@ -1,7 +1,9 @@
 # Python requirements
-ansible-lint==25.11.1
-ansible==13.0.0
+ansible-lint
+ansible==12.2.0
+ansible-core
 pyhcl==0.4.5
-pytest==9.0.2
-pytest-testinfra==10.2.2
+pytest==8.1.1
+pytest-testinfra==10.1.0
 python-consul==1.1.0
+pre-commit

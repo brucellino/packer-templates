@@ -20,43 +20,41 @@ jobs:
     env:
       VAULT_ADDR: http://localhost:8200
       VAULT_TOKEN: token
+      MISE_ENV: github-actions
       PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Run ansible-lint
-        uses: ansible/ansible-lint-action@v6.17.0
+      - name: Setup mise
+        uses: jdx/mise-action@v2
         with:
-          path: "${{ matrix.template }}"
-      - name: Create bin dir for cached binaries
-        run: mkdir "${HOME}/bin"
+          install: true
+          experimental: true
+      - name: Activate mise
+        run: echo 'eval "$(mise activate bash)"' >> ~/.bashrc
+      - name: Check Mise
+        run: mise doctor
+      - name: Install dependencies
+        run: mise tasks run install
+      - name: Run ansible-lint
+        run: mise exec -- ansible-lint ${{ matrix.template }}
       - name: Start Vault Server
         run: |
-          curl https://releases.hashicorp.com/vault/1.13.0/vault_1.13.0_linux_amd64.zip | \
-          gunzip -> "${HOME}/bin/vault" ; \
-          chmod u+x "${HOME}/bin/vault" ; \
-          ${HOME}/bin/vault server -dev -dev-root-token-id=${VAULT_TOKEN} | tee vault-output.txt &
+          mise exec -- vault server -dev -dev-root-token-id=${VAULT_TOKEN} | tee vault-output.txt &
       - name: Enable Secrets mounts
         run: |
-          ${HOME}/bin/vault secrets enable -path="digitalocean" -description="KV data" kv-v2 ; \
-          ${HOME}/bin/vault secrets enable -path="kv" kv-v2
+          vault secrets enable -path="digitalocean" -description="KV data" kv-v2 ; \
+          vault secrets enable -path="kv" kv-v2
       - name: Populate the DO secret
-        run: ${HOME}/bin/vault kv put -mount="digitalocean" tokens packer=${{ secrets.DO_TOKEN }}
+        run: vault kv put -mount="digitalocean" tokens packer=${{ secrets.DO_TOKEN }}
       - name: Populate vault autojoin token
-        run: ${HOME}/bin/vault kv patch -mount="digitalocean" tokens vault_auto_join=${{ secrets.DO_TOKEN }}
+        run: vault kv patch -mount="digitalocean" tokens vault_auto_join=${{ secrets.DO_TOKEN }}
       - name: Populate the GH secret
-        run: ${HOME}/bin/vault kv put -mount="kv" github ghcr_token=${{ secrets.GITHUB_TOKEN }}
+        run: vault kv put -mount="kv" github ghcr_token=${{ secrets.GITHUB_TOKEN }}
       - name: Populate Consul Encryption Key
-        run: ${HOME}/bin/vault kv put -mount="digitalocean" consul consul_gossip_key=${{ secrets.CONSUL_ENCRYPT_KEY }}
-      - name: "Get Packer"
-        run: |
-          curl https://releases.hashicorp.com/packer/1.8.2/packer_1.8.2_linux_amd64.zip | \
-          gunzip -> "${HOME}/bin/packer" ; \
-          chmod u+x "${HOME}/bin/packer"
-      - name: Add Ansible requirements
-        run: python3 -m pip install -r requirements.txt
+        run: vault kv put -mount="digitalocean" consul consul_gossip_key=${{ secrets.CONSUL_ENCRYPT_KEY }}
       - name: Add Ansible collections
         run: ansible-galaxy collection install community.hashi_vault
       - name: Add Ansible roles
@@ -67,9 +65,9 @@ jobs:
           fi
       - name: "Init Packer"
         run: |
-          cd ${{ matrix.template }} ; ${HOME}/bin/packer init .
+          cd ${{ matrix.template }} ; packer init .
       - name: "Validate Packer templates"
-        run: cd ${{ matrix.template }} ; PATH=${PATH}:${HOME}/bin/ packer validate .
+        run: cd ${{ matrix.template }} ; packer validate .
 
   release:
     needs:
@@ -84,7 +82,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 'lts/*'
+          node-version: "lts/*"
       - name: Install dependencies
         run: |
           npm install -D \
