@@ -1,3 +1,11 @@
+## [1.4.1](https://github.com/brucellino/packer-templates/compare/v1.4.0...v1.4.1) (2025-12-08)
+
+
+### Bug Fixes
+
+* **config:** read gossip key from Vault ([54bfe74](https://github.com/brucellino/packer-templates/commit/54bfe7462fd0d704634bb73adc05d2e0deff5d7c))
+* **consul:** update configuration to consul v1.18.0 ([c5cd95a](https://github.com/brucellino/packer-templates/commit/c5cd95ac90cb9edbba6eef6ff77631019327e026))
+
 # [1.4.0](https://github.com/brucellino/packer-templates/compare/v1.3.0...v1.4.0) (2023-03-22)
 
 
