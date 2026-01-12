@@ -34,7 +34,7 @@ repos:
           - "@commitlint/config-conventional"
           - "@commitlint/cli"
   - repo: https://github.com/ansible-community/ansible-lint
-    rev: v25.12.2
+    rev: v26.1.0
     hooks:
       - id: ansible-lint
         args: ["--exclude", ".github"]
