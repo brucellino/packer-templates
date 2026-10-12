@@ -28,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup mise
-        uses: jdx/mise-action@v3
+        uses: jdx/mise-action@v5
         with:
           install: true
           experimental: true
