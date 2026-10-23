@@ -6,7 +6,7 @@ uv = "latest"
 packer = "latest"
 consul = "2.1.0"
 vault = "2.2.1"
-python = "3.13"
+python = "3.15.1"
 
 
 [settings]
